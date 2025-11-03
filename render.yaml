@@ -2,10 +2,9 @@ services:
   - type: web
     name: shophub-api
     env: node
-  # Ensure dependencies are installed before building
-  # Install dependencies explicitly before building
-  installCommand: npm ci
-  buildCommand: npm run build
+    # Ensure dependencies are installed before building
+    installCommand: npm ci
+    buildCommand: npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
