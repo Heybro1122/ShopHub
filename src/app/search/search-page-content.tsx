@@ -1,6 +1,6 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -56,13 +56,13 @@ export default function SearchPageContent() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
   
-  const [query, setQuery] = useState(initialQuery)
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
-  const [cartCount, setCartCount] = useState(0)
+  const [query, setQuery] = React.useState(initialQuery)
+  const [products, setProducts] = React.useState<Product[]>([])
+  const [loading, setLoading] = React.useState(false)
+  const [showFilters, setShowFilters] = React.useState(false)
+  const [cartCount, setCartCount] = React.useState(0)
   
-  const [filters, setFilters] = useState<Filters>({
+  const [filters, setFilters] = React.useState<Filters>({
     category: [],
     priceRange: [0, 1000],
     rating: 0,
@@ -89,7 +89,7 @@ export default function SearchPageContent() {
     { value: 'bestselling', label: 'Best Selling' }
   ]
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (initialQuery) {
       handleSearch()
     }
@@ -126,14 +126,15 @@ export default function SearchPageContent() {
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch()
     }
   }
 
-  const updateFilter = (key: keyof Filters, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
+  // Strongly-typed filter updater
+  const updateFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
+    setFilters(prev => ({ ...prev, [key]: value } as Filters))
   }
 
   const toggleCategory = (category: string) => {
@@ -302,7 +303,7 @@ export default function SearchPageContent() {
                         <Checkbox
                           id={`rating-${rating}`}
                           checked={filters.rating === rating}
-                          onCheckedChange={() => updateFilter('rating', rating)}
+                          onCheckedChange={(checked) => updateFilter('rating', checked ? rating : 0)}
                         />
                         <label htmlFor={`rating-${rating}`} className="text-sm flex items-center">
                           <div className="flex items-center">
@@ -327,11 +328,11 @@ export default function SearchPageContent() {
                 {/* Stock */}
                 <div className="mb-6">
                   <h4 className="font-medium mb-3">Availability</h4>
-                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                     <Checkbox
                       id="inStock"
                       checked={filters.inStock}
-                      onCheckedChange={(checked) => updateFilter('inStock', checked)}
+                      onCheckedChange={(checked) => updateFilter('inStock', Boolean(checked))}
                     />
                     <label htmlFor="inStock" className="text-sm">
                       In Stock Only
