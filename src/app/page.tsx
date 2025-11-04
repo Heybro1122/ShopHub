@@ -765,106 +765,111 @@ export default function EcommerceHero() {
               className={viewMode === 'grid' ? 'grid md:grid-cols-2 lg:grid-cols-4 gap-6' : 'space-y-4'}
             >
               {products.map((product: any, index) => (
-                <motion.div
-                  key={product.id}
-                  variants={itemVariants}
-                  whileHover={{ y: -10 }}
-                  className="group"
-                >
-                  <Card className="h-full hover:shadow-xl transition-all duration-300 overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
-                        {imageLoadingStates[product.id] && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
-                          </div>
-                        )}
-                        
-                        {imageErrors[product.id] ? (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-4xl mb-2">📦</div>
-                              <p className="text-sm text-gray-500">Image not available</p>
+                <Link key={product.id} href={`/products/${product.id}`} passHref>
+                  <motion.div
+                    variants={itemVariants}
+                    whileHover={{ y: -10 }}
+                    className="group cursor-pointer"
+                  >
+                    <Card className="h-full hover:shadow-xl transition-all duration-300 overflow-hidden">
+                      <CardContent className="p-6">
+                        <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+                          {imageLoadingStates[product.id] && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
                             </div>
-                          </div>
-                        ) : (
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            fill
-                            className={`object-cover transition-all duration-300 group-hover:scale-110 ${
-                              imageLoadingStates[product.id] ? 'opacity-0' : 'opacity-100'
-                            }`}
-                            onLoadStart={() => handleImageLoadStart(product.id)}
-                            onLoad={() => handleImageLoad(product.id)}
-                            onError={() => handleImageError(product.id)}
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                          />
-                        )}
-                        
-                        {product.badge && (
-                          <Badge className="absolute top-2 right-2 bg-red-500 text-white z-10">
-                            {product.badge}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                        {product.name}
-                      </h3>
-                      
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                        {product.description}
-                      </p>
-                      
-                      <div className="flex items-center mb-2">
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(product.rating)
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
+                          )}
+                          
+                          {imageErrors[product.id] ? (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="text-4xl mb-2">📦</div>
+                                <p className="text-sm text-gray-500">Image not available</p>
+                              </div>
+                            </div>
+                          ) : (
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              fill
+                              className={`object-cover transition-all duration-300 group-hover:scale-110 ${
+                                imageLoadingStates[product.id] ? 'opacity-0' : 'opacity-100'
                               }`}
+                              onLoadStart={() => handleImageLoadStart(product.id)}
+                              onLoad={() => handleImageLoad(product.id)}
+                              onError={() => handleImageError(product.id)}
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                             />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
-                          ({product.reviews})
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                            ${product.price}
-                          </span>
-                          {product.originalPrice && (
-                            <span className="text-sm text-gray-500 line-through ml-2">
-                              ${product.originalPrice}
-                            </span>
+                          )}
+                          
+                          {product.badge && (
+                            <Badge className="absolute top-2 right-2 bg-red-500 text-white z-10">
+                              {product.badge}
+                            </Badge>
                           )}
                         </div>
-                        {product.originalPrice && (
-                          <Badge variant="destructive">
-                            -{Math.round((1 - product.price / product.originalPrice) * 100)}%
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <Button 
-                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-                          onClick={() => addToCart(product.id)}
-                        >
-                          <ShoppingCart className="w-4 h-4 mr-2" />
-                          Add to Cart
-                        </Button>
-                      </motion.div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                        
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                          {product.name}
+                        </h3>
+                        
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                          {product.description}
+                        </p>
+                        
+                        <div className="flex items-center mb-2">
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${
+                                  i < Math.floor(product.rating)
+                                    ? 'text-yellow-400 fill-current'
+                                    : 'text-gray-300'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                            ({product.reviews})
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                              ${product.price}
+                            </span>
+                            {product.originalPrice && (
+                              <span className="text-sm text-gray-500 line-through ml-2">
+                                ${product.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                          {product.originalPrice && (
+                            <Badge variant="destructive">
+                              -{Math.round((1 - product.price / product.originalPrice) * 100)}%
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button 
+                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              addToCart(product.id);
+                            }}
+                          >
+                            <ShoppingCart className="w-4 h-4 mr-2" />
+                            Add to Cart
+                          </Button>
+                        </motion.div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </Link>
               ))}
             </motion.div>
           )}
